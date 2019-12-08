@@ -93,7 +93,7 @@ def Arithmatic_encode (stream,precision=32):
         L = L + round( Range * S_low /StreamSize )
         
         #creating the cases for which we will emmit 0 or 1 to our final code word
-        while H < half or L > half: # the first two easy cases , if my range fully falls inside one block
+        while H < half or L >= half: # the first two easy cases , if my range fully falls inside one block
             if H < half : # if the full range falls in the lower half 
                 code.extend([0])
                 code.extend([1]*trails)
@@ -101,7 +101,7 @@ def Arithmatic_encode (stream,precision=32):
                 # scale the lower half to be the full range
                 L*=2
                 H*=2
-            elif L > half:# if the full range falls in the upper half 
+            elif L >= half:# if the full range falls in the upper half 
                 code.extend([1])
                 code.extend([0]*trails)
                 trails=0
@@ -109,7 +109,7 @@ def Arithmatic_encode (stream,precision=32):
                 L=2*( L - half )
                 H=2*( H - half )
                 
-        while L > quarter and H < 3*quarter: # if the range is split between the the upper half and the lower half
+        while L >= quarter and H < 3*quarter: # if the range is split between the the upper half and the lower half
             trails+=1
             L=2*(L-quarter)
             H=2*(H-quarter)      

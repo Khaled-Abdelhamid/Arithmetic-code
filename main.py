@@ -1,15 +1,27 @@
 from helpers import *
+import numpy as np
 
 # in this code we will use integer based arithmatic code insted of the infinte presciosn version 
 
-stream = [1,2,3,5,4,4]
+stream = [1,2,7,4,9,3,5,4,4]
+#stream=stream*6
 precision=32
 stream_size=len(stream)+1 # add the end of  file symbol
 
 code =Arithmatic_encode(stream,precision)
 print (code)
-code_size=len(code)
 
+
+string='00000011001100110110111010100'
+
+A=list(string)
+code=[]
+for i in A:
+    code.append(int(i))
+    
+print(code)
+
+code_size=len(code)
 # those numbers will be used later in the scaling and emitting step of the binary bits
 full =2**precision
 half=full/2
@@ -48,19 +60,19 @@ while flag:
             H=H0 
             if symbol == '!':
                 flag=0
-    while H < half or L > half:
+    while H < half or L >= half:
         if H < half : # if the range is in the lower half
             L*=2
             H*=2
             val*=2
-        elif L > half : # if the range is in the upper half
+        elif L >= half : # if the range is in the upper half
             L=2*(L-half)
             H=2*(H-half)
             val=2*(val-half)
         if indx<= stream_size and code[indx-1]==1:
             val+=1
             indx+=1
-        while L>quarter and H < 3*quarter:
+        while L>=quarter and H < 3*quarter:
             L=2*(L-quarter)
             H=2*(H-quarter)
             val=2*(val-quarter)
