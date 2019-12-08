@@ -2,9 +2,9 @@ from helpers import *
 
 # in this code we will use integer based arithmatic code insted of the infinte presciosn version 
 
-stream = [1,2,3]
-precision=8
-stream_size=len(stream)
+stream = [1,2,3,5,4,4]
+precision=32
+stream_size=len(stream)+1 # add the end of  file symbol
 
 code =Arithmatic_encode(stream,precision)
 print (code)
@@ -29,8 +29,8 @@ while indx < precision and indx < code_size:# first get the exact amount of valu
         val=val+2**(precision-indx)
     indx+=1
 flag=1
+# for inc in range(stream_size-1):
 while flag:
-    
     for symbol in dic:  
         
         freqSym=dic[symbol]    # get the frequency of the symbol
