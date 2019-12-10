@@ -3,24 +3,24 @@ import numpy as np
 
 # in this code we will use integer based arithmatic code insted of the infinte presciosn version 
 
-stream = [1,2,7,4,9,3,5,4,4]
-#stream=stream*6
-precision=32
+stream = [1,2,8,4,1,2,9,8,7,5,8,4,5,9,5,5,7,7,8,7]
+# stream=stream*600
+
+precision=512
 stream_size=len(stream)+1 # add the end of  file symbol
 
 code =Arithmatic_encode(stream,precision)
 print (code)
+print (len(code))
 
 
-string='00000011001100110110111010100'
+# string='00000011001100110110111010100'
 
-A=list(string)
-code=[]
-for i in A:
-    code.append(int(i))
+# A=list(string)
+# code=[]
+# for i in A:
+#     code.append(int(i))
     
-print(code)
-
 code_size=len(code)
 # those numbers will be used later in the scaling and emitting step of the binary bits
 full =2**precision
@@ -36,7 +36,7 @@ indx=1
 dic=getfreqs(stream) #output the the dictionary that contains the probabilities of  all ymbols
 message=[]
 
-while indx < precision and indx < code_size:# first get the exact amount of values that can be held in the precsion available , the rest will be used during the code
+while indx <= precision and indx <= code_size:# first get the exact amount of values that can be held in the precsion available , the rest will be used during the code
     if code[indx-1]==1:
         val=val+2**(precision-indx)
     indx+=1
@@ -46,9 +46,9 @@ while flag:
     for symbol in dic:  
         
         freqSym=dic[symbol]    # get the frequency of the symbol
-        
         S_high=Cumfreq(symbol,dic)   # get the higher limit of this symbol
         S_low=S_high-freqSym             # get the lower limit of this symbol
+        
         Range=H-L                   # get the range of the code  
         
         H0 = L + round( Range * S_high/stream_size )
@@ -60,24 +60,32 @@ while flag:
             H=H0 
             if symbol == '!':
                 flag=0
-    while H < half or L >= half:
+    while True:
         if H < half : # if the range is in the lower half
             L*=2
             H*=2
             val*=2
+            if indx<= stream_size:
+                val+=code[indx]
+                indx+=1 
         elif L >= half : # if the range is in the upper half
             L=2*(L-half)
             H=2*(H-half)
             val=2*(val-half)
-        if indx<= stream_size and code[indx-1]==1:
-            val+=1
-            indx+=1
-        while L>=quarter and H < 3*quarter:
+            if indx<= stream_size:
+                val+=code[indx]
+                indx+=1 
+        elif L>=quarter and H < 3*quarter:
             L=2*(L-quarter)
             H=2*(H-quarter)
             val=2*(val-quarter)
-            if indx<= stream_size and code[indx-1]==1:
-                val+=1
-            indx+=1
-                
+            
+            if indx<= stream_size:
+                val+=code[indx]
+                indx+=1 
+        else:
+            break
+               
+print(stream)     
 print (message)
+print(stream == message)

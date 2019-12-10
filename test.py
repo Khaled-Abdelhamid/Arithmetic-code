@@ -10,8 +10,13 @@ a.extend([7])
 print(a)
 
 from helpers import *
-dic={1: 1, 2: 1, 3: 1, '!': 1}
+dic={1: 7, 2: 5, '!': 1, 7: 2}
 for i in dic:
     print (i)
-    print(Cumfreq(i, dic))
+    freqSym=dic[i]
+    print('freqSym : ',freqSym)
+    S_high=Cumfreq(i,dic)   # get the higher limit of this symbol
+    S_low=S_high-freqSym         # get the lower limit of this symbo
+    print('S_high : ',S_high)
+    print('S_low : ',S_low)
     

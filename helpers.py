@@ -76,14 +76,12 @@ def Arithmatic_encode (stream,precision=32):
     code = [] # the list that will include the comressed code 
 
     # while symbol != '!':
-    for index in range(StreamSize):        
-        symbol=stream[index]# aquire the symbol from the stream
-        # index+=1
+    for symbol in stream:        
         
-        freqSym=dic[symbol]    # get the frequency of the symbol
-        
+        freqSym=dic[symbol]          # get the frequency of the symbol
         S_high=Cumfreq(symbol,dic)   # get the higher limit of this symbol
         S_low=S_high-freqSym         # get the lower limit of this symbol
+        
         Range=H-L                    # get the range of the code     
         # if (Range<(quarter+2)):
         #     print("precision error ,try to increase the precision")
@@ -93,7 +91,7 @@ def Arithmatic_encode (stream,precision=32):
         L = L + round( Range * S_low /StreamSize )
         
         #creating the cases for which we will emmit 0 or 1 to our final code word
-        while H < half or L >= half: # the first two easy cases , if my range fully falls inside one block
+        while True: # the first two easy cases , if my range fully falls inside one block
             if H < half : # if the full range falls in the lower half 
                 code.extend([0])
                 code.extend([1]*trails)
@@ -107,12 +105,13 @@ def Arithmatic_encode (stream,precision=32):
                 trails=0
                 # scale the upper half to be the full range
                 L=2*( L - half )
-                H=2*( H - half )
-                
-        while L >= quarter and H < 3*quarter: # if the range is split between the the upper half and the lower half
-            trails+=1
-            L=2*(L-quarter)
-            H=2*(H-quarter)      
+                H=2*( H - half )      
+            elif L >= quarter and H < 3*quarter: # if the range is split between the the upper half and the lower half
+                trails+=1
+                L=2*(L-quarter)
+                H=2*(H-quarter)  
+            else:
+                break        
     trails+=1
     if L<=quarter:
         code.extend([0])
