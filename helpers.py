@@ -65,8 +65,8 @@ def Arithmatic_encode (stream,precision=32):
 
     # those numbers will be used later in the scaling and emitting step of the binary bits
     full =2**precision
-    half=full/2
-    quarter=half/2
+    half=full//2
+    quarter=half//2
 
     L=0 # the lower limit of the range
     H=full # the upper limit of the range
@@ -87,8 +87,8 @@ def Arithmatic_encode (stream,precision=32):
         #     print("precision error ,try to increase the precision")
         #     break
         # the rounding happens to gurantee that everything is integer
-        H = L + round( Range * S_high/StreamSize )
-        L = L + round( Range * S_low /StreamSize )
+        H = L +  Range * S_high // StreamSize 
+        L = L +  Range * S_low // StreamSize 
         
         #creating the cases for which we will emmit 0 or 1 to our final code word
         while True: # the first two easy cases , if my range fully falls inside one block
